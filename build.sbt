@@ -16,5 +16,6 @@ libraryDependencies ++= {
   "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
   "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion,
   "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test,
+    "org.jsoup" % "jsoup" % "1.8.3",
   "com.google.inject" % "guice" % "4.1.0")
 }
