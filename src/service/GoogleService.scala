@@ -52,11 +52,11 @@ class GoogleService @Inject()(appConfig: AppConfig) {
     URLEncoder.encode(query, "UTF-8")
   }
 
-  def stripOutSecondSearchResult(query: String): Future[SearchResult] = {
+  def stripOutNthResult(query: String, n: Int): Future[SearchResult] = {
     def extractSearchResultFromHTMLBody(googleResults: String): SearchResult = {
       val doc = Jsoup.parse(googleResults)
       val results = doc.select("div.srg").first()
-      val h3ResultHyperLink = results.childNodes().get(1).childNodes().get(1).childNodes().get(0).childNodes.get(0).toString
+      val h3ResultHyperLink = results.childNodes().get(n-1).childNodes().get(1).childNodes().get(0).childNodes.get(0).toString
       val h3Url = Jsoup.parse(h3ResultHyperLink).select("a").first().attr("href")
       val h3Text = Jsoup.parse(h3ResultHyperLink).text()
       (SearchResult(h3Url, h3Text))
