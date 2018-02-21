@@ -10,6 +10,7 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.model.headers.{RawHeader, `User-Agent`}
 import akka.http.scaladsl.unmarshalling.Unmarshal
 import akka.stream.ActorMaterializer
+import model.SearchResult
 import org.jsoup.Jsoup
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -48,17 +49,14 @@ class GoogleService @Inject()(appConfig: AppConfig){
       htmlBody: String =>
         val doc = Jsoup.parse(htmlBody)
         val results = doc.select("div.srg").first()
+        val h3 = results.childNodes().get(1).childNodes().get(1).childNodes().get(0).childNodes.get(0).toString
         println(results)
 //        System.out.println(results)
-        val secondResult = results.select("div.g :nth-of-type(2)").html()
+//        val secondResult = results.select("div.g :nth-of-type(2)")
 //        val h3 = secondResult.select("h3").first().html()
-        println("######")
-        System.out.println(secondResult)
-        println("#########")
-//        System.out.println(h3)
-        //System.out.println(doc.select("div.g :nth-of-type(2)").html)
-//        doc.select("div.g :nth-of-type(2)").select("cite").first().text
-        //System.out.println(doc)
+        val h3url = Jsoup.parse(h3).select("a").first().attr("href")
+        val h3text = Jsoup.parse(h3).text()
+        SearchResult(h3url, h3text)
         doc.html
     }
   }
