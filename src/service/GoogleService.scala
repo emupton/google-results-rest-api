@@ -41,8 +41,7 @@ class GoogleService @Inject()(appConfig: AppConfig){
   def stripOutSecondSearchResult(query: String) = {
     search(query).map {
       htmlBody: String =>
-        val doc = Jsoup.parse(htmlBody)
-        System.out.println(doc.select("div.g :nth-of-type(2)").html)
+        val doc: Document = Jsoup.parse(htmlBody)
         doc.select("div.g :nth-of-type(2)").select("cite").first().text
     }
   }
