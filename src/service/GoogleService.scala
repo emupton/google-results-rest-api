@@ -38,13 +38,13 @@ class GoogleService @Inject()(appConfig: AppConfig) {
       httpResponse.status match {
         case StatusCodes.OK =>
           responseBody
-        case code => throw new Exception("there's an issue with the connectivity to Google")
+        case code => throw new Exception("there's an issue with the request being made to Google")
       }
     }
 
     for {
       response <- request
-      respMarshal <- Unmarshal(response.entity).to[String]
+      respMarshal <- Unmarshal(response.entity).to[String] //loading the response body into a String of HTML
     } yield handleResp(response, respMarshal)
   }
 
@@ -59,7 +59,7 @@ class GoogleService @Inject()(appConfig: AppConfig) {
       val h3ResultHyperLink = results.childNodes().get(n-1).childNodes().get(1).childNodes().get(0).childNodes.get(0).toString
       val h3Url = Jsoup.parse(h3ResultHyperLink).select("a").first().attr("href")
       val h3Text = Jsoup.parse(h3ResultHyperLink).text()
-      (SearchResult(h3Url, h3Text))
+      SearchResult(h3Url, h3Text)
     }
 
     search(query).map { googleSearchResults => extractSearchResultFromHTMLBody(googleSearchResults) }
