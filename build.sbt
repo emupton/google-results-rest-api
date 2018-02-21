@@ -1,4 +1,4 @@
-name := "prime-number-rest-akka"
+name := "google-results-rest-akka"
 
 version := "1.0"
 

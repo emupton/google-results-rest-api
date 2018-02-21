@@ -14,5 +14,5 @@ class AppConfig {
 
   lazy val googleUrl: String = config.getString("google.url")
 
-  lazy val appName: String = config.getString("app.name") //TODO: don't leave this in if it's redundant...
+  lazy val appName: String = config.getString("app.name")
 }
