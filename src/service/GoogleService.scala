@@ -42,7 +42,10 @@ class GoogleService @Inject()(appConfig: AppConfig){
     search(query).map {
       htmlBody: String =>
         val doc = Jsoup.parse(htmlBody)
-        System.out.println(doc.select("div.g :nth-of-type(2)").html)
+        val results = doc.select("div.srg").first()
+        System.out.println(results.html())
+//        System.out.println("exp: "+ results.select("div.g :nth-of-type(2)").html())
+        //System.out.println(doc.select("div.g :nth-of-type(2)").html)
         doc.select("div.g :nth-of-type(2)").select("cite").first().text
     }
   }
