@@ -21,3 +21,5 @@ Example response:
   "title": "Welcome to Example.com!"
 }
 ```
+Error codes:
+- 503 ServiceUnavailable when Google is returning a non-200 response to the search request
