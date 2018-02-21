@@ -8,14 +8,13 @@ import akka.http.scaladsl.server.RouteResult.route2HandlerFlow
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Flow
 import com.google.inject.{AbstractModule, Guice, Injector}
+import util.AkkaSystemUtils
 
 /**
   * Created by emma on 19/02/2018.
   */
 
-trait MainApp {
-  implicit val system: ActorSystem = ActorSystem("actor-system")
-  implicit val materializer: ActorMaterializer = ActorMaterializer()
+trait MainApp extends AkkaSystemUtils {
 
   lazy val injector: Injector = Guice.createInjector(GuiceModule)
   lazy val appConfig: AppConfig = injector.getInstance(classOf[AppConfig])

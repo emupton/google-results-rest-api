@@ -6,12 +6,11 @@ import app.AppConfig
 import com.google.inject.{Inject, Singleton}
 import java.net.URLEncoder
 
-import akka.actor.ActorSystem
-import akka.http.scaladsl.model.headers.{RawHeader, `User-Agent`}
+import akka.http.scaladsl.model.headers.`User-Agent`
 import akka.http.scaladsl.unmarshalling.Unmarshal
-import akka.stream.ActorMaterializer
 import model.SearchResult
 import org.jsoup.Jsoup
+import util.AkkaSystemUtils
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -20,13 +19,10 @@ import scala.concurrent.Future
   * Created by emma on 19/02/2018.
   */
 @Singleton
-class GoogleService @Inject()(appConfig: AppConfig) {
+class GoogleService @Inject()(appConfig: AppConfig) extends AkkaSystemUtils {
   val url = appConfig.googleUrl + "/search?q="
   //user agent required due to google using different style sheets depending on browser...
   val USER_AGENT_VALUE = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36"
-
-  implicit val system: ActorSystem = ActorSystem("actor-system")
-  implicit val materializer: ActorMaterializer = ActorMaterializer()
 
   def search(query: String): Future[String] = {
 
