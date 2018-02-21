@@ -23,6 +23,7 @@ class GoogleService @Inject()(appConfig: AppConfig) extends AkkaSystemUtils {
   val url = appConfig.googleUrl + "/search?q="
   //user agent required due to google using different style sheets depending on browser...
   val USER_AGENT_VALUE = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36"
+  val RESULTS_CSS_SELECTOR = "div.srg"
 
   def search(query: String): Future[String] = {
 
@@ -51,10 +52,10 @@ class GoogleService @Inject()(appConfig: AppConfig) extends AkkaSystemUtils {
   def stripOutNthResult(query: String, n: Int): Future[SearchResult] = {
     def extractSearchResultFromHTMLBody(googleResults: String): SearchResult = {
       val doc = Jsoup.parse(googleResults)
-      val results = doc.select("div.srg").first()
-      val h3ResultHyperLink = results.childNodes().get(n-1).childNodes().get(1).childNodes().get(0).childNodes.get(0).toString
-      val h3Url = Jsoup.parse(h3ResultHyperLink).select("a").first().attr("href")
-      val h3Text = Jsoup.parse(h3ResultHyperLink).text()
+      val results = doc.select(RESULTS_CSS_SELECTOR).first()
+      val h3ResultHyperLink = Jsoup.parse(results.childNodes().get(n-1).childNodes().get(1).childNodes().get(0).childNodes.get(0).toString)
+      val h3Url = h3ResultHyperLink.select("a").first().attr("href")
+      val h3Text = h3ResultHyperLink.text()
       SearchResult(h3Url, h3Text)
     }
 
