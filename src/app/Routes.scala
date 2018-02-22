@@ -23,7 +23,7 @@ class Routes @Inject()(googleService: GoogleService){
     pathPrefix("query") {
       path(Remaining) { query => onComplete(googleService.stripOutNthResult(query, 2)) {
         case Success(searchResult) => complete(OK, searchResult)
-        case Failure(exception) => complete(ServiceUnavailable, DownstreamError("Connectivity issues to Google"))
+        case Failure(exception) => complete(ServiceUnavailable, DownstreamError(s"Connectivity issues to Google: received a ${exception.getMessage} response"))
       }
       }
     } ~

@@ -34,7 +34,7 @@ class GoogleService @Inject()(appConfig: AppConfig) extends AkkaSystemUtils {
       httpResponse.status match {
         case StatusCodes.OK =>
           responseBody
-        case code => throw new Exception("there's an issue with the request being made to Google")
+        case code => throw new Exception(code.toString()) //would normally avoid throwing an exception and instead use EitherT pattern but seems overkill here
       }
     }
 
