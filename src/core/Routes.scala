@@ -6,7 +6,7 @@ import akka.http.scaladsl.server.RouteConcatenation._enhanceRouteWithConcatenati
 import akka.http.scaladsl.server.directives.FutureDirectives.onComplete
 import akka.http.scaladsl.model.StatusCodes.{OK, ServiceUnavailable}
 import akka.http.scaladsl.server.Directives._
-import com.google.inject.Inject
+import com.google.inject.{Inject, Singleton}
 import model.DownstreamError
 import service.GoogleService
 
@@ -16,6 +16,7 @@ import util.ImplicitJsonConversions._
 /**
   * Created by emma on 19/02/2018.
   */
+@Singleton
 class Routes @Inject()(googleService: GoogleService){
 
   val exceptionHandler = ExceptionHandler {

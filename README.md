@@ -5,6 +5,10 @@ This application exposes an API to retrieve a JSON-formatted search result based
 This application is currently configured to run on port 8001. To run this application you need SBT installed, and then when within the directory of the repository enter the following command:
 ```sbt run```
 
+## To test
+To test this application an installation of sbt is also required. From the shell you then will run the following command:
+```sbt test```
+
 ## API
 
 ### GET /query/:q
@@ -22,4 +26,4 @@ Example response:
 }
 ```
 Error codes:
-- 503 ServiceUnavailable when Google is returning a non-200 response to the search request
+- 503 ServiceUnavailable when Google is returning a non-200 response to the search request, or when the formatting of its search result page has changed

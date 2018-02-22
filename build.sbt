@@ -17,7 +17,6 @@ libraryDependencies ++= {
   Seq(
     "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
     "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion,
-    "com.github.tomakehurst" % "wiremock" % "2.15.0" % IntegrationTest,
     "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test,
     "org.scalatest" %% "scalatest" % "3.0.5" % "test, it",
     "org.jsoup" % "jsoup" % "1.8.3",

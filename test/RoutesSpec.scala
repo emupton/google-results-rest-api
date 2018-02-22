@@ -1,10 +1,7 @@
 import akka.http.scaladsl.model.{HttpMethods, HttpRequest, StatusCodes}
 import akka.http.scaladsl.testkit.ScalatestRouteTest
-import akka.http.scaladsl.unmarshalling.Unmarshal
 import com.google.inject.Guice
 import core.{AppConfig, Module, Routes}
-import exception.GoogleFormatException
-import model.SearchResult
 import org.scalatest.Matchers
 import org.scalatest.WordSpec
 import service.GoogleService
