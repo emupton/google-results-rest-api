@@ -51,10 +51,10 @@ class GoogleService @Inject()(appConfig: AppConfig) extends AkkaSystemUtils {
   def stripOutNthResult(query: String, n: Int): Future[SearchResult] = {
     def extractSearchResultFromHTMLBody(googleResults: String): SearchResult = {
       val doc = Jsoup.parse(googleResults)
-      val results = doc.select("div.srg").first()
-      val h3ResultHyperLink = results.childNodes().get(n-1).childNodes().get(1).childNodes().get(0).childNodes.get(0).toString
-      val h3Url = Jsoup.parse(h3ResultHyperLink).select("a").first().attr("href")
-      val h3Text = Jsoup.parse(h3ResultHyperLink).text()
+
+      val nthResult = doc.select(s"div.srg .g:nth-child(${n-1}) h3").first()
+      val h3Text = nthResult.text()
+      val h3Url = nthResult.select("a").first().attr("href")
       SearchResult(h3Url, h3Text)
     }
 
