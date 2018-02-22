@@ -2,7 +2,7 @@ package service
 
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
-import app.AppConfig
+import core.AppConfig
 import com.google.inject.{Inject, Singleton}
 import java.net.URLEncoder
 
@@ -49,10 +49,11 @@ class GoogleService @Inject()(appConfig: AppConfig) extends AkkaSystemUtils {
   }
 
   def stripOutNthResult(query: String, n: Int): Future[SearchResult] = {
+
     def extractSearchResultFromHTMLBody(googleResults: String): SearchResult = {
       val doc = Jsoup.parse(googleResults)
 
-      val nthResult = doc.select(s"div.srg .g:nth-child(${n-1}) h3").first()
+      val nthResult = doc.select(s"div.srg .g:nth-child(${n}) h3").first()
       val h3Text = nthResult.text()
       val h3Url = nthResult.select("a").first().attr("href")
       SearchResult(h3Url, h3Text)
