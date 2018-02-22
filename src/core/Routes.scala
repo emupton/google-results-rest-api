@@ -20,7 +20,7 @@ class Routes @Inject()(googleService: GoogleService){
 
   val exceptionHandler = ExceptionHandler {
     case e: Exception =>
-        complete(HttpResponse(ServiceUnavailable, entity = e.getMessage))
+        complete(ServiceUnavailable, DownstreamError(e.getMessage))
   }
 
   lazy val routes: Route = {

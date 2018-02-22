@@ -14,6 +14,7 @@ import util.AkkaSystemUtils
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import exception._
 
 /**
   * Created by emma on 19/02/2018.
@@ -34,7 +35,7 @@ class GoogleService @Inject()(appConfig: AppConfig) extends AkkaSystemUtils {
       httpResponse.status match {
         case StatusCodes.OK =>
           responseBody
-        case code => throw new Exception(code.toString()) //would normally avoid throwing an exception and instead use EitherT pattern but seems overkill here
+        case code => throw new Exception(s"Non-OK response from Google: code ${code.toString()}") //would normally avoid throwing an exception and instead use EitherT pattern but seems overkill here
       }
     }
 
@@ -52,6 +53,12 @@ class GoogleService @Inject()(appConfig: AppConfig) extends AkkaSystemUtils {
 
     def extractSearchResultFromHTMLBody(googleResults: String): SearchResult = {
       val doc = Jsoup.parse(googleResults)
+
+      val searchResultsDiv = doc.select(s"div.srg")
+
+      if(searchResultsDiv.isEmpty) {
+        throw new GoogleFormatException("The formatting of the Google search results has changed")
+      }
 
       val nthResult = doc.select(s"div.srg .g:nth-child(${n}) h3").first()
       val h3Text = nthResult.text()

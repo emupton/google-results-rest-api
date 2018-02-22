@@ -3,6 +3,7 @@ import akka.http.scaladsl.testkit.ScalatestRouteTest
 import akka.http.scaladsl.unmarshalling.Unmarshal
 import com.google.inject.Guice
 import core.{AppConfig, Module, Routes}
+import exception.GoogleFormatException
 import model.SearchResult
 import org.scalatest.Matchers
 import org.scalatest.WordSpec
@@ -64,5 +65,19 @@ class RoutesSpec extends WordSpec with Matchers with ScalatestRouteTest {
           response.entity.toString() should include("400")
         }
       }
+
+    "return a 503 when Google returns a 200 response with different formatting" in {
+      val googleService = new GoogleService(appConfig) {
+        override def search(query: String): Future[String] = {
+          Future.successful("1234")
+        }
+      }
+      val serviceRoutes = new Routes(googleService)
+
+      HttpRequest(HttpMethods.GET, uri = "/query/helloworld") ~> serviceRoutes.routes ~> check {
+        response.status shouldBe StatusCodes.ServiceUnavailable
+        response.entity.toString() should include("The formatting of the Google search results has changed")
+      }
+    }
     }
 }
