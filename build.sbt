@@ -4,7 +4,7 @@ version := "1.0"
 
 scalaVersion := "2.12.4"
 
-herokuAppName in Compile := "fierce-oasis-45476"
+herokuAppName in Compile := "thawing-badlands-55815"
 
 scalaSource in Compile := baseDirectory.value / "src"
 resourceDirectory in Compile := baseDirectory.value / "conf"

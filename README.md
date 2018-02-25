@@ -33,7 +33,7 @@ Example response:
 {
   "uri": "http://example.com/",
   "title": "Welcome to Example.com!",
-  "description": "Example.com contains all things relevant to Examples".
+  "description": "Example.com contains all things relevant to Examples",
   "requestUrl": "http://google.co.uk/search?q=example"
 }
 ```
