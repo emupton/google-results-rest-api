@@ -35,6 +35,9 @@ This responses with a JSON document with the following fields:
 |description| The paragraph description associated with the search result*|
 |requestUrl| The URL the application is using to make the search request (useful for verifying/testing the validity of the result back |
 
+ **indicates this information is obtained directly from the scraping of the retrieved Google search results page*
+
+
 Example response:
 
 ```json
