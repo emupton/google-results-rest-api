@@ -2,7 +2,7 @@ package service
 
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
-import app.AppConfig
+import core.AppConfig
 import com.google.inject.{Inject, Singleton}
 import java.net.URLEncoder
 
@@ -14,6 +14,7 @@ import util.AkkaSystemUtils
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import exception._
 
 /**
   * Created by emma on 19/02/2018.
@@ -35,7 +36,7 @@ class GoogleService @Inject()(appConfig: AppConfig) extends AkkaSystemUtils {
       httpResponse.status match {
         case StatusCodes.OK =>
           responseBody
-        case code => throw new Exception("there's an issue with the request being made to Google")
+        case code => throw new Exception(s"Non-OK response from Google: code ${code.toString()}") //would normally avoid throwing an exception and instead use EitherT pattern but seems overkill here
       }
     }
 
@@ -50,12 +51,19 @@ class GoogleService @Inject()(appConfig: AppConfig) extends AkkaSystemUtils {
   }
 
   def stripOutNthResult(query: String, n: Int): Future[SearchResult] = {
+
     def extractSearchResultFromHTMLBody(googleResults: String): SearchResult = {
       val doc = Jsoup.parse(googleResults)
-      val results = doc.select(RESULTS_CSS_SELECTOR).first()
-      val h3ResultHyperLink = Jsoup.parse(results.childNodes().get(n-1).childNodes().get(1).childNodes().get(0).childNodes.get(0).toString)
-      val h3Url = h3ResultHyperLink.select("a").first().attr("href")
-      val h3Text = h3ResultHyperLink.text()
+
+      val searchResultsDiv = doc.select(s"div.srg")
+
+      if(searchResultsDiv.isEmpty) {
+        throw new GoogleFormatException("The formatting of the Google search results has changed")
+      }
+
+      val nthResult = doc.select(s"div.srg .g:nth-child(${n}) h3").first()
+      val h3Text = nthResult.text()
+      val h3Url = nthResult.select("a").first().attr("href")
       SearchResult(h3Url, h3Text)
     }
 
