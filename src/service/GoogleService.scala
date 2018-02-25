@@ -25,8 +25,10 @@ class GoogleService @Inject()(appConfig: AppConfig) extends AkkaSystemUtils {
   * make it country-specific), and thus this effects the kinds of search results coming back.
   * So to make these consistent I've added an additional search parameter (&uule) that's supposed to specify the location
   * since apparently using just the .co.uk Google domain isn't a reliable method to ensure you aren't
-  * redirected to the calling region's Google search engine.*/
-  def url(query: String) = s"${appConfig.googleUrl}/search?q=${encode(query)}&uule=w+CAIQICIOVW5pdGVkIEtpbmdkb20&safe=high&gws_rd=cr&dcr=0&ei=u9mSWrvSCIPKwQLjr6O4Dg"
+  * redirected to the calling region's Google search engine.
+  * Despite all of this, there are still some inconsistencies with certain search queries.
+  * */
+  def url(query: String): String = s"${appConfig.googleUrl}/search?q=${encode(query)}&uule=w+CAIQICIOVW5pdGVkIEtpbmdkb20&safe=high&gws_rd=cr&dcr=0&ei=u9mSWrvSCIPKwQLjr6O4Dg"
   //user agent required due to google using different style sheets depending on browser...
   val USER_AGENT_VALUE = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36"
   val RESULTS_CSS_SELECTOR = "div.srg"
@@ -55,7 +57,9 @@ class GoogleService @Inject()(appConfig: AppConfig) extends AkkaSystemUtils {
   }
 
   def encode(query: String): String = {
-    query.replace(" ", "+").replaceAll("[^A-Za-z0-9]", "").format("UTF-8")
+    /*the request URL needs to substitute spaces for + signs, and for simplicity's sake i've stripped
+    * out any 'non-alphanumeric-plus-sign' characters*/
+    query.replace("%20", "+").replaceAll("[^A-Za-z0-9+]", "")
   }
 
   def stripOutNthResult(query: String, n: Int): Future[SearchResult] = {
