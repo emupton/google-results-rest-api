@@ -1,8 +1,12 @@
+import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
+
 name := "google-results-rest-akka"
 
 version := "1.0"
 
 scalaVersion := "2.12.4"
+
+herokuAppName in Compile := "fierce-oasis-45476"
 
 scalaSource in Compile := baseDirectory.value / "src"
 resourceDirectory in Compile := baseDirectory.value / "conf"
@@ -22,5 +26,7 @@ libraryDependencies ++= {
     "org.jsoup" % "jsoup" % "1.8.3",
     "com.google.inject" % "guice" % "4.1.0")
 }
+
+enablePlugins(JavaAppPackaging)
 
 lazy val root = (project in file(".")).configs(IntegrationTest).settings(Defaults.itSettings: _*)
