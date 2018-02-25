@@ -23,9 +23,17 @@ the heroku server returns will reflect what you would get back hitting the reque
 
 ### GET /query/:q
 
-Takes in a string query which is then used for a Google search.
+Takes in a string query which is then used for a Google search. It then sends back a response with information about the *second* search result retrieved.
 
-Responds with a JSON document with the URI associated with the retrieved search result, a long with a title.
+This responses with a JSON document with the following fields:
+
+
+|Field name|Description|
+|----------|-----------|
+| uri      | The URL associated with the search result*|
+| title    | The title/H3 tag associated with the search result*|
+|description| The paragraph description associated with the search result*|
+|requestUrl| The URL the application is using to make the search request (useful for verifying/testing the validity of the result back |
 
 Example response:
 
