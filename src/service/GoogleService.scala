@@ -44,7 +44,7 @@ class GoogleService @Inject()(appConfig: AppConfig) extends AkkaSystemUtils {
 
     def handleResp(httpResponse: HttpResponse, responseBody: String): String = {
       httpResponse.status match {
-        case StatusCodes.OK =>
+        case StatusCodes.OK | StatusCodes.PermanentRedirect =>
           println(httpResponse.status.toString())
           responseBody
         case code => throw new Exception(s"Non-OK response from Google: code ${code.toString()}") //would normally avoid throwing an exception and instead use EitherT pattern but seems overkill here
