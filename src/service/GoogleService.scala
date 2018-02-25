@@ -21,7 +21,11 @@ import exception._
   */
 @Singleton
 class GoogleService @Inject()(appConfig: AppConfig) extends AkkaSystemUtils {
-  val url = appConfig.googleUrl + "/search?q="
+  /*when deployed search results are inconsistent due to Heroku having different availability region,
+  * so to make these consistent I've added an additional search parameter that's supposed to specify the location
+  * since apparently using just the .co.uk Google domain isn't a reliable method to ensure you aren't
+  * redirected to the calling region's Google search engine*/
+  def url(query: String) = appConfig.googleUrl + "/search?q=" + query + "&near=London"
   //user agent required due to google using different style sheets depending on browser...
   val USER_AGENT_VALUE = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36"
   val RESULTS_CSS_SELECTOR = "div.srg"

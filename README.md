@@ -9,6 +9,14 @@ This application is currently configured to run on port 8001. To run this applic
 To test this application an installation of sbt is also required. From the shell you then will run the following command:
 ```sbt test```
 
+## To access
+This application is deployed with Heroku. Since the API only supports GET requests you can hit it directly in the browser at the documented endpoints through
+the following address:
+```https://fierce-oasis-45476.herokuapp.com```
+
+
+*(e.g ```https://fierce-oasis-45476.herokuapp.com/query/hello%20world``` )*
+
 ## API
 
 ### GET /query/:q

@@ -1,5 +1,3 @@
-import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
-
 name := "google-results-rest-akka"
 
 version := "1.0"
