@@ -4,7 +4,6 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
 import core.AppConfig
 import com.google.inject.{Inject, Singleton}
-import java.net.URLEncoder
 
 import akka.http.scaladsl.model.headers.`User-Agent`
 import akka.http.scaladsl.unmarshalling.Unmarshal
@@ -24,10 +23,9 @@ class GoogleService @Inject()(appConfig: AppConfig) extends AkkaSystemUtils {
   /*when deployed search results are inconsistent due to Heroku having different geographic locations across their availability regions.
   * There's limited configuration options available in terms of ensuring where in these regions a request will be served from (e.g you can't
   * make it country-specific), and thus this effects the kinds of search results coming back.
-  * So to make these consistent I've added an additional search parameter that's supposed to specify the location
+  * So to make these consistent I've added an additional search parameter (&uule) that's supposed to specify the location
   * since apparently using just the .co.uk Google domain isn't a reliable method to ensure you aren't
-  * redirected to the calling region's Google search engine. Using the near parameter does still
-  * effect the results though*/
+  * redirected to the calling region's Google search engine.*/
   def url(query: String) = s"${appConfig.googleUrl}/search?q=${encode(query)}&uule=w+CAIQICIOVW5pdGVkIEtpbmdkb20&safe=high&gws_rd=cr&dcr=0&ei=u9mSWrvSCIPKwQLjr6O4Dg"
   //user agent required due to google using different style sheets depending on browser...
   val USER_AGENT_VALUE = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36"
@@ -57,7 +55,7 @@ class GoogleService @Inject()(appConfig: AppConfig) extends AkkaSystemUtils {
   }
 
   def encode(query: String): String = {
-    URLEncoder.encode(query, "UTF-8")
+    query.replace(" ", "+").replaceAll("[^A-Za-z0-9]", "").format("UTF-8")
   }
 
   def stripOutNthResult(query: String, n: Int): Future[SearchResult] = {
@@ -71,10 +69,11 @@ class GoogleService @Inject()(appConfig: AppConfig) extends AkkaSystemUtils {
         throw new GoogleFormatException("The formatting of the Google search results has changed")
       }
 
-      val nthResult = doc.select(s"div.srg .g:nth-child(${n}) h3").first()
-      val h3Text = nthResult.text()
-      val h3Url = nthResult.select("a").first().attr("href")
-      SearchResult(h3Url, h3Text, googleResults)
+      val resultHeader = doc.select(s"div.srg .g:nth-child(${n}) h3").first()
+      val resultDescription = doc.select(s"div.srg .g:nth-child(${n}) span.st").first().text()
+      val resultHeaderText = resultHeader.text()
+      val resultHeaderUrl = resultHeader.select("a").first().attr("href")
+      SearchResult(resultHeaderUrl, resultHeaderText, resultDescription, url(query))
     }
 
     search(query).map { googleSearchResults => extractSearchResultFromHTMLBody(googleSearchResults) }

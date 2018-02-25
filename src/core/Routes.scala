@@ -28,8 +28,10 @@ class Routes @Inject()(googleService: GoogleService){
     handleExceptions(exceptionHandler) {
       pathPrefix("query") {
         path(Remaining) { query =>
-          onComplete(googleService.stripOutNthResult(query, 2)) {
-            case Success(searchResult) => complete(OK, searchResult)
+          get {
+            onComplete(googleService.stripOutNthResult(query, 2)) {
+              case Success(searchResult) => complete(OK, searchResult)
+            }
           }
         }
       } ~
