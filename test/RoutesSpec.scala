@@ -58,4 +58,14 @@ class RoutesSpec extends WordSpec with Matchers with ScalatestRouteTest {
       }
     }
     }
+
+  "return a 503 when Google returns a non-200 response" in {
+    lazy val googleService = new GoogleService(appConfig) {
+    }
+    lazy val serviceRoutes = new Routes(googleService)
+
+    HttpRequest(HttpMethods.GET, uri = "/healthcheck") ~> serviceRoutes.routes ~> check {
+      response.status shouldBe StatusCodes.OK
+    }
+  }
 }

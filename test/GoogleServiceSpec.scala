@@ -14,7 +14,7 @@ import scala.io.Source
   */
 class GoogleServiceSpec extends WordSpec with Matchers with ScalaFutures {
 
-  val injector = Guice.createInjector(new Module())
+  lazy val injector = Guice.createInjector(new Module())
   val appConfig = injector.getInstance(classOf[AppConfig])
 
   lazy val googleService = new GoogleService(appConfig) {
