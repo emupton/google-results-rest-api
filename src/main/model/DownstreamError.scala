@@ -1,4 +1,4 @@
-package model
+package main.model
 
 /**
   * Created by emma on 21/02/2018.

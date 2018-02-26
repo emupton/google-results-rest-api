@@ -1,4 +1,4 @@
-package core
+package main.core
 
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.server.{ExceptionHandler, Route}
@@ -7,11 +7,11 @@ import akka.http.scaladsl.server.directives.FutureDirectives.onComplete
 import akka.http.scaladsl.model.StatusCodes.{OK, ServiceUnavailable}
 import akka.http.scaladsl.server.Directives._
 import com.google.inject.{Inject, Singleton}
-import model.DownstreamError
-import service.GoogleService
+import main.model.DownstreamError
+import main.service.GoogleService
 
 import scala.util.{Failure, Success}
-import util.ImplicitJsonConversions._
+import main.util.ImplicitJsonConversions._
 
 /**
   * Created by emma on 19/02/2018.

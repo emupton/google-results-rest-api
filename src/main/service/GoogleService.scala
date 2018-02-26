@@ -1,19 +1,19 @@
-package service
+package main.service
 
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
-import core.AppConfig
+import main.core.AppConfig
 import com.google.inject.{Inject, Singleton}
 
 import akka.http.scaladsl.model.headers.`User-Agent`
 import akka.http.scaladsl.unmarshalling.Unmarshal
-import model.SearchResult
+import main.model.SearchResult
 import org.jsoup.Jsoup
-import util.AkkaSystemUtils
+import main.util.AkkaSystemUtils
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import exception._
+import main.exception._
 
 /**
   * Created by emma on 19/02/2018.
@@ -45,9 +45,8 @@ class GoogleService @Inject()(appConfig: AppConfig) extends AkkaSystemUtils {
     def handleResp(httpResponse: HttpResponse, responseBody: String): String = {
       httpResponse.status match {
         case StatusCodes.OK | StatusCodes.PermanentRedirect =>
-          println(httpResponse.status.toString())
           responseBody
-        case code => throw new Exception(s"Non-OK response from Google: code ${code.toString()}") //would normally avoid throwing an exception and instead use EitherT pattern but seems overkill here
+        case code => throw new Exception(s"Non-OK response from Google: code ${code.toString()}") //would normally avoid throwing an main.exception and instead use EitherT pattern but seems overkill here
       }
     }
 

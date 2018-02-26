@@ -1,4 +1,4 @@
-package core
+package main.core
 
 import akka.NotUsed
 import akka.actor.ActorSystem
@@ -8,7 +8,7 @@ import akka.http.scaladsl.server.RouteResult.route2HandlerFlow
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Flow
 import com.google.inject.{AbstractModule, Guice, Injector}
-import util.AkkaSystemUtils
+import main.util.AkkaSystemUtils
 
 /**
   * Created by emma on 19/02/2018.
