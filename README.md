@@ -1,3 +1,5 @@
+### 2019 Note: This project is not actively maintained, parsing logic on Google search results has likely changed
+
 # Google Results REST API Implemented in AKKA-HTTP
 This application exposes an API to retrieve a JSON-formatted search result based on a supplied query string. This is achieved through making a HTTP request to Google for the supplied query and then parsing the outgoing HTML with the JSoup parsing framework.
 
